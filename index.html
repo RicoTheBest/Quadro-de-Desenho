@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quadro de Desenho</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #F5F5F5; /* Cor de fundo da página */
+      font-family: 'Arial', sans-serif;
+    }
+
+    #canvas-container {
+      position: relative;
+      border: 20px solid #8B4513; /* Cor da borda (marrom escuro) */
+      border-radius: 20px; /* Borda arredondada */
+      background-color: #D2B48C; /* Cor de fundo (marrom claro) */
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Adicionando uma sombra */
+    }
+
+    #canvas {
+      border: 1px solid #000;
+      border-radius: 15px; /* Borda arredondada para o quadro de desenho */
+      background-color: #FFF; /* Cor de fundo do quadro de desenho (branco) */
+    }
+
+    #canvas-text {
+      position: absolute;
+      top: 10px; /* Posição do texto em relação ao topo do contêiner */
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    #clear-button {
+      position: absolute;
+      top: 10px;
+      right: 10px; /* Posição do botão em relação ao lado direito do contêiner */
+      padding: 10px;
+      background-color: #FF6347; /* Cor de fundo do botão (tomate) */
+      border: none;
+      border-radius: 5px;
+      color: #FFF;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #signature {
+      position: absolute;
+      top: 10px; /* Ajuste da posição do texto à direita do contêiner */
+      right: 10px; /* Posição do texto à direita do contêiner */
+      font-size: 14px;
+      font-style: italic;
+      color: blue; /* Mudança da cor para azul */
+    }
+
+    #enrico-text {
+      position: absolute;
+      top: 30px; /* Ajuste da posição do novo texto abaixo da assinatura */
+      right: 10px; /* Posição do novo texto à direita do contêiner */
+      font-size: 16px;
+      color: #555; /* Cor do novo texto */
+    }
+  </style>
+</head>
+<body>
+
+<div id="canvas-container">
+  <div id="canvas-text">Quadro de Desenho</div>
+  <canvas id="canvas" width="1200" height="800"></canvas>
+  <button id="clear-button" onclick="clearCanvas()">Limpar o Quadro</button>
+</div>
+
+<div id="signature">Created by Enrico Petrocelli and ChatGPT!</div>
+<div id="enrico-text">Enrico ツ</div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let painting = false;
+
+  function startPosition(e) {
+    painting = true;
+    draw(e);
+  }
+
+  function endPosition() {
+    painting = false;
+    ctx.beginPath();
+  }
+
+  function draw(e) {
+    if (!painting) return;
+
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000';
+
+    const rect = canvas.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+
+    ctx.lineTo(offsetX, offsetY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(offsetX, offsetY);
+  }
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  canvas.addEventListener('mousedown', startPosition);
+  canvas.addEventListener('mouseup', endPosition);
+  canvas.addEventListener('mousemove', draw);
+
+</script>
+
+</body>
+</html>
